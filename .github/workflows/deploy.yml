@@ -22,15 +22,6 @@ jobs:
       - name: List output files
         run: ls
 
-      - name: List dist files
-        run: cd dist && ls && cd ..
-
-      - name: git status
-        run: git status -uno --porcelain
-
-      - name: reset package-lock.json
-        run: git checkout package-lock.json
-
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
