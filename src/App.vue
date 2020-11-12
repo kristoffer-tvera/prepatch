@@ -63,6 +63,12 @@
       >
         <div class="d-flex w-100 justify-content-between" title="Click to copy waypoint" @click="clipboard(boss.waypoint)">
           <h5 class="mb-1">{{ boss.name }}</h5>
+          <div v-if="boss.id == 17" class="ml-auto mr-2">
+            <img src="@/assets/mount.jpg" alt="mount pic" class="special-loot">
+          </div>
+          <div v-if="boss.id == 1" class="ml-auto mr-2">
+            <img src="@/assets/bag.jpg" alt="mount pic" class="special-loot">
+          </div>
           <small>{{ boss.nextSpawn }}</small>
         </div>
       </div>
@@ -222,5 +228,9 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.special-loot{
+  max-height: 25px;
 }
 </style>
