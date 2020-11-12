@@ -1,4 +1,4 @@
-<template>
+<template class="pepega">
   <nav class="navbar navbar-light bg-light navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"> Amused to Death </a>
@@ -16,7 +16,10 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <button class="btn btn-outline-secondary mr-2" type="button" @click="pepegaTimeformat = !pepegaTimeformat">24H / AM-PM</button>
+            <button class="btn btn-outline-secondary mr-2" type="button" @click="darkMode = !darkMode">Toggle darkmode</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary mr-2" type="button" @click="pepegaTimeformat = !pepegaTimeformat">24H/12H</button>
           </li>
           <li class="nav-item">
             <button class="btn btn-outline-secondary mr-2" type="button" @click="sortedList = !sortedList">Toggle sort</button>
@@ -85,12 +88,13 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 export default {
   name: 'App',
-  components: {},
+  components: {}, 
   mounted() {
     this.updateTime();
     setInterval(this.updateTime, 1000);
@@ -98,6 +102,7 @@ export default {
   },
   data() {
     return {
+      darkMode: true,
       pepegaTimeformat: false,
       sortedList: false,
       timeBetweenBossSpawns: 20,
@@ -165,6 +170,11 @@ export default {
         this.updateRotation();
       },
     },
+    darkMode: {
+      handler: function() {
+        document.body.classList.toggle('darkmode');
+      }
+    }
   },
   methods: {
     compare(a, b) {
@@ -178,11 +188,18 @@ export default {
       let minute = date.getUTCMinutes().toString().padStart(2, '0');
       let seconds = date.getUTCSeconds().toString().padStart(2, '0');
 
+      let suffix = '';
+
+      if(this.pepegaTimeformat){
+        suffix = (date.getUTCHours() + (1 % 24)) < 12 ? 'AM' : 'PM';
+        hour = ((date.getUTCHours() + 1 ) % 12).toString().padStart(2, '0');
+      }
+
       if (seconds === '00') {
         this.updateRotation();
       }
 
-      this.currentTime = `${hour}:${minute}:${seconds}`;
+      this.currentTime = `${hour}:${minute}:${seconds} ${suffix}`;
     },
 
     updateRotation() {
@@ -244,4 +261,29 @@ export default {
 .special-loot {
   max-height: 35px;
 }
+
+.darkmode {
+  background-color: #232323;
+  h1 {
+    color: #fff;
+  }
+  .bg-light{
+    background-color: #232323 !important;
+    color: #fff;
+  }
+  .navbar-brand{
+    color: #fff;
+  }
+  .navbar-nav{
+    .nav-link{
+      color: #fff;
+    }
+  }
+  .list-group-item{
+    background-color: #696969;
+    color: #fff;
+  }
+}
 </style>
+
+
