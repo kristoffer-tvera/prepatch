@@ -15,6 +15,12 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary mr-2" type="button" @click="pepegaTimeformat = !pepegaTimeformat">24H / AM-PM</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-secondary mr-2" type="button" @click="sortedList = !sortedList">Toggle sort</button>
+          </li>
           <li class="nav-item" v-for="link in links" :key="link.id">
             <a
               class="nav-link"
@@ -50,9 +56,10 @@
       <div
         class="list-group-item list-group-item-action"
         v-bind:class="{ active: boss.active }"
-        aria-current="{{boss.active}}"
-        v-for="boss in rotation"
+        :aria-current="boss.active"
+        v-for="boss in sortedRotation"
         :key="boss.id"
+        :data-sort-order="boss.sortOrder"
       >
         <div class="d-flex w-100 justify-content-between" title="Click to copy waypoint" @click="clipboard(boss.waypoint)">
           <h5 class="mb-1">{{ boss.name }}</h5>
@@ -71,14 +78,11 @@ export default {
     this.updateTime();
     setInterval(this.updateTime, 1000);
     this.updateRotation();
-
-    // for (let i = 0; i < this.rotation.length; i++) {
-    //   this.rotation[i].nextSpawn = ((i * 20) % 60).toString();
-    // }
   },
-
   data() {
     return {
+      pepegaTimeformat: false,
+      sortedList: false,
       timeBetweenBossSpawns: 20,
       currentTime: '__:__:__',
       links: [
@@ -128,7 +132,29 @@ export default {
       ],
     };
   },
+  computed: {
+    sortedRotation: function () {
+      if (this.sortedList) {
+        let copy = this.rotation.slice();
+        return copy.sort(this.compare);
+      } else {
+        return this.rotation;
+      }
+    },
+  },
+  watch: {
+    pepegaTimeformat: {
+      handler: function () {
+        this.updateRotation();
+      },
+    },
+  },
   methods: {
+    compare(a, b) {
+      if (a.sortOrder < b.sortOrder) return -1;
+      if (a.sortOrder > b.sortOrder) return 1;
+      return 0;
+    },
     updateTime() {
       let date = new Date();
       let hour = (date.getUTCHours() + (1 % 24)).toString().padStart(2, '0');
@@ -151,7 +177,7 @@ export default {
       let offsetHours = Math.floor(offsetMinutes / 60);
       let currentRotation = Math.floor(offsetMinutes / 20) % this.rotation.length;
 
-      let currentMinute = Math.ceil((offsetMinutes % 60)/20)*20;
+      let currentMinute = Math.ceil((offsetMinutes % 60) / 20) * 20;
       let currentHour = (offsetHours + 9) % 24;
       for (let i = 0; i < this.rotation.length; i++) {
         let index = (i + currentRotation) % this.rotation.length;
@@ -160,10 +186,18 @@ export default {
         let minuteToString = (minute % 60).toString().padStart(2, '0');
 
         let hour = (currentHour + Math.floor(minute / 60)) % 24;
+        let suffix = '';
+
+        if(this.pepegaTimeformat){
+          suffix = hour < 12 ? 'AM' : 'PM';
+          hour = hour % 12;
+        }
+
         let hourToString = hour.toString().padStart(2, '0');
 
-        this.rotation[index].nextSpawn = `${hourToString}:${minuteToString}`;
-        this.rotation[i].sortOrder = index;
+        this.rotation[index].nextSpawn = `${hourToString}:${minuteToString} ${suffix}`;
+
+        this.rotation[index].sortOrder = i;
         this.rotation[i].active = false;
       }
       this.rotation[currentRotation].active = true;
