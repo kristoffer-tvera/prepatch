@@ -88,13 +88,12 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 export default {
   name: 'App',
-  components: {}, 
+  components: {},
   mounted() {
     this.updateTime();
     setInterval(this.updateTime, 1000);
@@ -171,10 +170,10 @@ export default {
       },
     },
     darkMode: {
-      handler: function() {
+      handler: function () {
         document.body.classList.toggle('darkmode');
-      }
-    }
+      },
+    },
   },
   methods: {
     compare(a, b) {
@@ -190,9 +189,9 @@ export default {
 
       let suffix = '';
 
-      if(this.pepegaTimeformat){
-        suffix = (date.getUTCHours() + (1 % 24)) < 12 ? 'AM' : 'PM';
-        hour = ((date.getUTCHours() + 1 ) % 12).toString().padStart(2, '0');
+      if (this.pepegaTimeformat) {
+        suffix = date.getUTCHours() + (1 % 24) < 12 ? 'AM' : 'PM';
+        hour = ((date.getUTCHours() + 1) % 12).toString().padStart(2, '0');
       }
 
       if (seconds === '00') {
@@ -267,19 +266,19 @@ export default {
   h1 {
     color: #fff;
   }
-  .bg-light{
+  .bg-light {
     background-color: #232323 !important;
     color: #fff;
   }
-  .navbar-brand{
+  .navbar-brand {
     color: #fff;
   }
-  .navbar-nav{
-    .nav-link{
+  .navbar-nav {
+    .nav-link {
       color: #fff;
     }
   }
-  .list-group-item{
+  .list-group-item {
     background-color: #696969;
     color: #fff;
   }
