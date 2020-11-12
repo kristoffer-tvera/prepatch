@@ -61,13 +61,24 @@
         :key="boss.id"
         :data-sort-order="boss.sortOrder"
       >
-        <div class="d-flex w-100 justify-content-between" title="Click to copy waypoint" @click="clipboard(boss.waypoint)">
+        <div class="d-flex w-100 justify-content-between" title="Click to copy waypoint">
           <h5 class="mb-1">{{ boss.name }}</h5>
-          <div v-if="boss.id == 17" class="ml-auto mr-2">
-            <img src="@/assets/mount.jpg" alt="mount pic" class="special-loot">
+          <div class="ml-auto"></div>
+          <div v-if="boss.id == 17" class="mr-2">
+            <img src="@/assets/mount.jpg" alt="mount pic" class="special-loot" />
           </div>
-          <div v-if="boss.id == 1" class="ml-auto mr-2">
-            <img src="@/assets/bag.jpg" alt="mount pic" class="special-loot">
+          <div v-if="boss.id == 1" class="mr-2">
+            <img src="@/assets/bag.jpg" alt="mount pic" class="special-loot" />
+          </div>
+          <div class="mr-2">
+            <button
+              class="btn mr-2"
+              v-bind:class="{ 'btn-outline-light': boss.active, 'btn-outline-primary': !boss.active }"
+              type="button"
+              @click="clipboard(boss.waypoint)"
+            >
+              Copy waypoint
+            </button>
           </div>
           <small>{{ boss.nextSpawn }}</small>
         </div>
@@ -194,7 +205,7 @@ export default {
         let hour = (currentHour + Math.floor(minute / 60)) % 24;
         let suffix = '';
 
-        if(this.pepegaTimeformat){
+        if (this.pepegaTimeformat) {
           suffix = hour < 12 ? 'AM' : 'PM';
           hour = hour % 12;
         }
@@ -230,7 +241,7 @@ export default {
   color: #2c3e50;
 }
 
-.special-loot{
-  max-height: 25px;
+.special-loot {
+  max-height: 35px;
 }
 </style>
