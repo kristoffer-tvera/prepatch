@@ -22,6 +22,9 @@
             <button class="btn btn-outline-secondary mr-2 my-2 my-lg-0" type="button" @click="$emit('toggle-pepega-time-format')">24H/12H</button>
           </li>
           <li class="nav-item">
+            <button class="btn btn-outline-secondary mr-2 my-2 my-lg-0" type="button" @click="$emit('toggle-european')">EU/NA</button>
+          </li>
+          <li class="nav-item">
             <button class="btn btn-outline-secondary mr-2 my-2 my-lg-0" type="button" @click="$emit('toggle-sorted-list')">Toggle sort</button>
           </li>
           <li class="nav-item" v-for="link in links" :key="link.id">
@@ -72,6 +75,6 @@ export default {
       ],
     };
   },
-  emits: ['toggle-darkmode', 'toggle-pepega-time-format', 'toggle-sorted-list'],
+  emits: ['toggle-darkmode', 'toggle-pepega-time-format', 'toggle-sorted-list', 'toggle-european'],
 };
 </script>

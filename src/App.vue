@@ -3,9 +3,10 @@
     v-on:toggle-darkmode="darkMode = !darkMode"
     v-on:toggle-pepega-time-format="pepegaTimeFormat = !pepegaTimeFormat"
     v-on:toggle-sorted-list="sortedList = !sortedList"
+    v-on:toggle-european="european = !european"
   />
 
-  <Servertime :pepega-time-format="pepegaTimeFormat" />
+  <Servertime :pepega-time-format="pepegaTimeFormat" :european="european" />
 
   <div aria-live="polite" aria-atomic="true" style="position: fixed; min-height: 100vh; width: 100%">
     <div
@@ -21,7 +22,7 @@
     </div>
   </div>
 
-  <Bosslist :pepega-time-format="pepegaTimeFormat" :sorted-list="sortedList" v-on:clipboard="clipboard" />
+  <Bosslist :pepega-time-format="pepegaTimeFormat" :sorted-list="sortedList" v-on:clipboard="clipboard" :european="european"/>
 </template>
 
 <script>
@@ -42,7 +43,7 @@ export default {
       darkMode: this.getFromLocalStorageOrFallback('darkMode', false),
       pepegaTimeFormat: this.getFromLocalStorageOrFallback('pepegaTimeFormat', false),
       sortedList: this.getFromLocalStorageOrFallback('sortedList', false),
-      timeBetweenBossSpawns: 20,
+      european: this.getFromLocalStorageOrFallback('european', true) 
     };
   },
   watch: {
@@ -62,6 +63,11 @@ export default {
         this.serializeSettings();
       },
     },
+    european: {
+      handler: function () {
+        this.serializeSettings();
+      },
+    },
   },
   methods: {
     getFromLocalStorageOrFallback(key, fallback) {
@@ -76,6 +82,7 @@ export default {
       localStorage.setItem('darkMode', JSON.stringify(this.darkMode));
       localStorage.setItem('pepegaTimeFormat', JSON.stringify(this.pepegaTimeFormat));
       localStorage.setItem('sortedList', JSON.stringify(this.sortedList));
+      localStorage.setItem('european', JSON.stringify(this.european));
     },
 
     clipboard(input) {

@@ -1,6 +1,4 @@
 <template>
-  
-
   <div class="container my-4 py-4">
     <div class="list-group">
       <div
@@ -40,7 +38,7 @@
 <script>
 export default {
   name: 'Bosslist',
-  props: ['pepega-time-format', 'sorted-list'],
+  props: ['pepega-time-format', 'sorted-list', 'european'],
   data() {
     return {
       rotation: [
@@ -65,6 +63,9 @@ export default {
         { id: 18, name: 'Ingvar the Plunderer', waypoint: '/way 52,4, 52,6', active: false, nextSpawn: '', sortOrder: -1 },
         { id: 19, name: 'Prince Keleseth', waypoint: '/way 54,0, 44,7', active: false, nextSpawn: '', sortOrder: -1 },
       ],
+      timeBetweenBossSpawns: 20,
+      timeOffset: this.european ? 9 : 0,
+      bossOffset: this.european ? 0 : 16,
     };
   },
   mounted() {
@@ -87,6 +88,18 @@ export default {
         this.updateRotation();
       },
     },
+    european: {
+      handler: function () {
+          if(this.european){
+              this.timeOffset = 9;
+              this.bossOffset = 0;
+          } else {
+              this.timeOffset = 0;
+              this.bossOffset = 16;
+          }
+        this.updateRotation();
+      },
+    },
   },
   methods: {
     compare(a, b) {
@@ -102,20 +115,20 @@ export default {
     },
 
     updateRotation() {
-      let epoch = Date.UTC(2020, 10, 11, 8, 0, 0);
+        let epoch = Date.UTC(2020, 10, 11, 8, 0, 0);
       let nowUtc = new Date().getTime();
       let offsetMilliseconds = nowUtc - epoch;
       let offsetSeconds = Math.floor(offsetMilliseconds / 1000);
       let offsetMinutes = Math.floor(offsetSeconds / 60);
       let offsetHours = Math.floor(offsetMinutes / 60);
-      let currentRotation = Math.floor(offsetMinutes / 20) % this.rotation.length;
+      let currentRotation = (Math.floor(offsetMinutes / this.timeBetweenBossSpawns) + this.bossOffset) % this.rotation.length;
 
-      let currentMinute = Math.ceil((offsetMinutes % 60) / 20) * 20;
-      let currentHour = (offsetHours + 9) % 24;
+      let currentMinute = Math.ceil((offsetMinutes % 60) / this.timeBetweenBossSpawns) * this.timeBetweenBossSpawns;
+      let currentHour = (offsetHours + this.timeOffset) % 24;
       for (let i = 0; i < this.rotation.length; i++) {
         let index = (i + currentRotation) % this.rotation.length;
 
-        let minute = currentMinute + i * 20;
+        let minute = currentMinute + i * this.timeBetweenBossSpawns;
         let minuteToString = (minute % 60).toString().padStart(2, '0');
 
         let hour = (currentHour + Math.floor(minute / 60)) % 24;
