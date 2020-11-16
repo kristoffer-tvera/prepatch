@@ -63,9 +63,9 @@ export default {
         { id: 18, name: 'Ingvar the Plunderer', waypoint: '/way 52,4, 52,6', active: false, nextSpawn: '', sortOrder: -1 },
         { id: 19, name: 'Prince Keleseth', waypoint: '/way 54,0, 44,7', active: false, nextSpawn: '', sortOrder: -1 },
       ],
-      timeBetweenBossSpawns: 20,
+      timeBetweenBossSpawns: 10,
       timeOffset: this.european ? 9 : 0,
-      bossOffset: this.european ? 0 : 16,
+      bossOffset: this.european ? 7 : 19,
     };
   },
   mounted() {
@@ -90,13 +90,13 @@ export default {
     },
     european: {
       handler: function () {
-          if(this.european){
-              this.timeOffset = 9;
-              this.bossOffset = 0;
-          } else {
-              this.timeOffset = 0;
-              this.bossOffset = 16;
-          }
+        if (this.european) {
+          this.timeOffset = 9;
+          this.bossOffset = 7;
+        } else {
+          this.timeOffset = 0;
+          this.bossOffset = 19;
+        }
         this.updateRotation();
       },
     },
@@ -109,13 +109,13 @@ export default {
     },
 
     updateTime() {
-      if (new Date().getSeconds === 0) {
+      if (new Date().getSeconds() === 0) {
         this.updateRotation();
       }
     },
 
     updateRotation() {
-        let epoch = Date.UTC(2020, 10, 11, 8, 0, 0);
+      let epoch = Date.UTC(2020, 10, 11, 8, 0, 0);
       let nowUtc = new Date().getTime();
       let offsetMilliseconds = nowUtc - epoch;
       let offsetSeconds = Math.floor(offsetMilliseconds / 1000);
